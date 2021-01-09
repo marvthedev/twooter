@@ -6,15 +6,50 @@
       <div class="profile__user-followers">
         <strong>Followers:</strong> {{ followers }}
       </div>
-
-      <!-- Twoots -->
+      <form
+        action=""
+        class="profile__twoot-form"
+        @submit.prevent="createNewTwoot"
+      >
+        <label for="profile__new-twoot-input" class="profile__new-twoot-title"
+          >New Twoot</label
+        >
+        <textarea
+          id="profile__new-twoot-input"
+          class="profile__new-twoot-input"
+          rows="4"
+          v-model="newTwootContent"
+        ></textarea>
+        <div class="profile__new-twoot-type">
+          <label
+            for="profile__new-twoot-type-select"
+            class="profile__new-twoot-type-title"
+            >Type:</label
+          >
+          <select
+            id="profile__new-twoot-type-select"
+            class="profile__new-twoot-type-select"
+            v-model="selectedTwootType"
+          >
+            <option
+              :value="option.value"
+              v-for="(option, index) in twootTypes"
+              :key="index"
+              >{{ option.name }}</option
+            >
+          </select>
+        </div>
+        <button>Twoot!</button>
+      </form>
     </div>
-    <div class="profile__user__twoots">
+    <!-- Twoots -->
+    <div class="profile__user-twoots">
       <twoots
         v-for="twoot in user.twoots"
         v-bind:key="twoot.id"
-        :username="user.userName"
+        :userName="user.userName"
         :twoot="twoot"
+        @fave="toggleFavourite"
       />
     </div>
   </div>
@@ -49,6 +84,18 @@ export default {
           },
         ],
       },
+      twootTypes: [
+        {
+          value: "draft",
+          name: "Draft",
+        },
+        {
+          value: "instant",
+          name: "Instant Twoot",
+        },
+      ],
+      newTwootContent: "",
+      selectedTwootType: "instant ",
     };
   },
 
@@ -70,6 +117,17 @@ export default {
     addFollower() {
       this.followers++;
     },
+    toggleFavourite(id) {
+      console.log(`Favorited Tweet #${id}`);
+    },
+    createNewTwoot() {
+      if (this.newTwootContent && this.selectedTwootType !== "draft") {
+        this.user.twoots.unshift({
+          id: this.user.twoots.length + 1,
+          content: this.newTwootContent,
+        });
+      }
+    },
   },
 
   mounted() {
@@ -80,14 +138,16 @@ export default {
 
 <style lang="scss">
 .profile {
+  margin-top: 4rem;
   display: flex;
+  justify-content: center;
   &__user {
     display: flex;
     flex-direction: column;
     justify-content: center;
     background: white;
-    height: 10rem;
-    margin-top: 4rem;
+    height: 50%;
+    width: 30rem;
     padding: 2rem;
     &-tag {
       margin-top: 0.5rem;
@@ -102,6 +162,35 @@ export default {
     &-followers {
       font-size: 1.4rem;
       margin-top: 0.7rem;
+    }
+  }
+  &__twoot-form {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    border-top: 0.1rem solid#e8e8e8;
+    padding-top: 1rem;
+  }
+
+  &__new-twoot {
+    &-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    &-input {
+      margin-top: 1rem;
+      border: 0.1rem solid#e8e8e8;
+    }
+    &-type {
+      margin-top: 0.5rem;
+      &-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+      }
+      &-select {
+        margin-left: 1rem;
+        border: 0.1rem solid#e8e8e8;
+      }
     }
   }
 }
