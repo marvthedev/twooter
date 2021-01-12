@@ -12,7 +12,7 @@
         @submit.prevent="createNewTwoot"
       >
         <label for="profile__new-twoot-input" class="profile__new-twoot-title"
-          >New Twoot</label
+          >New Twoot <span>({{ characterCount }}/180)</span></label
         >
         <textarea
           id="profile__new-twoot-input"
@@ -95,7 +95,7 @@ export default {
         },
       ],
       newTwootContent: "",
-      selectedTwootType: "instant ",
+      selectedTwootType: "instant",
     };
   },
 
@@ -111,6 +111,9 @@ export default {
     fullName() {
       return `${this.user.firstName} ${this.user.lastName}`;
     },
+    characterCount() {
+      return this.newTwootContent.length;
+    },
   },
 
   methods: {
@@ -121,11 +124,12 @@ export default {
       console.log(`Favorited Tweet #${id}`);
     },
     createNewTwoot() {
-      if (this.newTwootContent && this.selectedTwootType !== "draft") {
+      if (this.selectedTwootType !== "draft" && this.newTwootContent !== "") {
         this.user.twoots.unshift({
           id: this.user.twoots.length + 1,
           content: this.newTwootContent,
         });
+        this.newTwootContent = "";
       }
     },
   },
@@ -176,6 +180,9 @@ export default {
     &-title {
       font-size: 1.8rem;
       font-weight: 700;
+      & span {
+        font-weight: 400;
+      }
     }
     &-input {
       margin-top: 1rem;
