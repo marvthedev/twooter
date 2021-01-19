@@ -1,17 +1,12 @@
 <template>
   <div class="container">
-    <userProfile />
+    <router-view />
   </div>
 </template>
 
 <script>
-import userProfile from "@/components/UserProfile";
-
 export default {
   name: "Twootter",
-  components: {
-    userProfile,
-  },
 };
 </script>
 

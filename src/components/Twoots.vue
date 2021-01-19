@@ -1,7 +1,7 @@
 <template>
   <div class="twoots">
     <div class="twoots__container" @click="faveTwoot(twoot.id)">
-      <div class="twoots__user">@{{ userName }}</div>
+      <div class="twoots__user">@{{ username }}</div>
       <div class="twoots__content">{{ twoot.content }}</div>
     </div>
   </div>
@@ -11,18 +11,13 @@
 export default {
   name: "Twoot",
   props: {
-    userName: {
+    username: {
       type: String,
       required: true,
     },
     twoot: {
       type: Object,
       required: true,
-    },
-  },
-  methods: {
-    faveTwoot(twootId) {
-      this.$emit("fave", twootId);
     },
   },
 };
